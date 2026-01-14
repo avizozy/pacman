@@ -1,30 +1,24 @@
 import random
 import arcade
-from pymunk.examples.index_video import radius
 
-from constants import TILE_SIZE
-LEVEL_MAP = [
-    "###########",
-    "#P....G...#",
-    "#.........#",
-    "###########",
-]
+
+from constants import LEVEL_MAP,TILE_SIZE
+player_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.YELLOW,255,255)
+enemy_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.RED,255,255)
+coin_texture=arcade.make_soft_circle_texture(TILE_SIZE//6,arcade.color.YELLOW,255,255)
 
 class Coin:
     def __init__(self,center_x,center_y):
         self.center_x = center_x
         self.center_y = center_y
+        self.texture=coin_texture
         self.value = 10
 
 class Character(arcade.Sprite):
-    def __init__(self,center_x,center_y,color):
+    def __init__(self,center_x,center_y,texture):
         super().__init__()
-        radius = TILE_SIZE // 2 - 2
-        texture = arcade.make_circle_texture(radius*2,color)
-        self.width = texture.width - 9
-        self.height = texture.height - 9
-        self.texture = texture
         self.center_x = center_x
+        self.texture=texture
         self.center_y = center_y
         self.speed = 0
         self.change_x = 0
@@ -33,7 +27,7 @@ class Character(arcade.Sprite):
 
 class Player(Character):
     def __init__(self,center_x,center_y):
-        super().__init__(center_x,center_y)
+        super().__init__(center_x,center_y,player_texture)
         self.score = 0
         self.lives = 3
 
@@ -43,7 +37,7 @@ class Player(Character):
 
 class Enemy(Character):
     def __init__(self,center_x,center_y):
-        super().__init__(center_x,center_y)
+        super().__init__(center_x,center_y,enemy_texture)
         self.time_to_change_direction = 0
 
     def pick_new_direction(self):
