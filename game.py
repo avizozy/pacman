@@ -40,6 +40,6 @@ class PacmanGame(arcade.View):
                 else:
                     print("Not valid")
     def on_draw(self):
-
+        pass
 
 
