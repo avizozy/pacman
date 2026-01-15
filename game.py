@@ -54,5 +54,6 @@ class PacmanGame(arcade.View):
             arcade.draw_text(f"Score {self.player.score}",250,500,arcade.color.YELLOW)
         else:
             arcade.draw_text("The game is over",WINDOW_WIDTH//2,WINDOW_HEIGHT//2,arcade.color.YELLOW)
+            print()
 
 
