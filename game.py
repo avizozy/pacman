@@ -5,8 +5,8 @@
 - PacmanGame: ניהול מצב המשחק, ציור, עדכון ותשובת מקלדת.
 """
 import arcade
-from constants import TILE_SIZE,WINDOW_TITLE,WINDOW_WIDTH,WINDOW_HEIGHT,LEVEL_MAP
-from characters import Wall, Coin, Character, Enemy, Player, enemy_texture,player_texture,coin_texture,wall_texture
+from constants import *
+from characters import *
 
 
 class PacmanGame(arcade.View):
@@ -50,8 +50,8 @@ class PacmanGame(arcade.View):
             self.ghost_list.draw()
             self.coin_list.draw()
             self.player_list.draw()
-            arcade.draw_text(f"{self.player.lives} Lives",200,500,arcade.color.YELLOW)
-            arcade.draw_text(f"Score {self.player.score}",250,500,arcade.color.YELLOW)
+            arcade.draw_text(f"{self.player.lives * "💛"}",0,700,arcade.color.YELLOW)
+            arcade.draw_text(f"Score {self.player.score}",0,680,arcade.color.YELLOW,16)
         else:
             arcade.draw_text("The game is over",WINDOW_WIDTH//2,WINDOW_HEIGHT//2,arcade.color.YELLOW)
             print()

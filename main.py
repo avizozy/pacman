@@ -7,8 +7,8 @@
 - אתחול המשחק
 - הרצת לולאת המשחק
 """
+from game import *
 import arcade
-from game import PacmanGame
 
 def main():
     """פונקציית main שמריצה את המשחק."""
