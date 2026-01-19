@@ -4,9 +4,11 @@
 מכיל את המחלקה:
 - PacmanGame: ניהול מצב המשחק, ציור, עדכון ותשובת מקלדת.
 """
+from turtledemo.clock import setup
+
+import arcade
 from constants import *
 from characters import *
-import arcade
 
 
 class PacmanGame(arcade.View):
@@ -26,16 +28,16 @@ class PacmanGame(arcade.View):
         rows = len(LEVEL_MAP)
         for row_idx, row in enumerate(LEVEL_MAP):
             for col_idx, cell in enumerate(row):
-                x = col_idx * TILE_SIZE + TILE_SIZE/2
-                y = (rows - row_idx - 1) * TILE_SIZE + TILE_SIZE /2
+                x = col_idx * TILE_SIZE + TILE_SIZE / 2
+                y = (rows - row_idx - 1) * TILE_SIZE + TILE_SIZE / 2
                 if LEVEL_MAP[row_idx][col_idx] == "#":
-                    wall_to_append = Wall(x,y,wall_texture)
+                    wall_to_append = arcade.Sprite(Wall(x,y))
                     self.wall_list.append(wall_to_append)
                 elif LEVEL_MAP[row_idx][col_idx] == ".":
-                    coin_to_append = Coin(x,y,coin_texture)
+                    coin_to_append = arcade.Sprite(Coin(x,y))
                     self.coin_list.append(coin_to_append)
                 elif LEVEL_MAP[row_idx][col_idx] == "P":
-                    player_to_append = Player(x,y,player_texture)
+                    player_to_append = arcade.Sprite(Player(x,y))
                     self.player_list.append(player_to_append)
                     self.player = player_to_append
                 elif LEVEL_MAP[row_idx][col_idx] == "G":
@@ -85,6 +87,19 @@ class PacmanGame(arcade.View):
                 self.player.speed = 0
                 if self.player.lives <= 0:
                     self.game_over = True
+
+    def on_key_press(self,key,modifiers):
+        if key== arcade.key.SPACE:
+           return setup()
+        elif key==arcade.key.UP:
+             self.player.change_y+=1
+        elif key==arcade.key.DOWN:
+             self.player.change_y-=1
+        elif key==arcade.key.RIGHT:
+            self.player.change_x+=1
+        elif key == arcade.key.LEFT:
+            self.player.change_x -= 1
+
 
 
 

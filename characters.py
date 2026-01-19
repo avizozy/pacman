@@ -2,7 +2,7 @@ import random
 import arcade
 
 
-from constants import TILE_SIZE
+from constants import LEVEL_MAP,TILE_SIZE
 player_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.YELLOW,255,255)
 enemy_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.RED,255,255)
 coin_texture=arcade.make_soft_circle_texture(TILE_SIZE//6,arcade.color.YELLOW,255,255)
