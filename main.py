@@ -7,10 +7,17 @@
 - אתחול המשחק
 - הרצת לולאת המשחק
 """
+from game import *
+from constants import *
+import arcade
 
 def main():
     """פונקציית main שמריצה את המשחק."""
-
+    arcade.Window(WINDOW_WIDTH,WINDOW_HEIGHT)
+    pacmen_game = PacmanGame()
+    pacmen_game.setup()
+    pacmen_game.on_draw()
+    arcade.run()
 
 
 if __name__ == "__main__":

@@ -4,9 +4,13 @@
 מכיל את המחלקה:
 - PacmanGame: ניהול מצב המשחק, ציור, עדכון ותשובת מקלדת.
 """
+from turtledemo.clock import setup
+
 import arcade
-from constants import TILE_SIZE,WINDOW_TITLE,WINDOW_WIDTH,WINDOW_HEIGHT,LEVEL_MAP
-from characters import Wall,Coin,Character,Enemy,Player
+from constants import *
+from characters import *
+
+
 class PacmanGame(arcade.View):
     def __init__(self):
         super().__init__()
@@ -35,11 +39,69 @@ class PacmanGame(arcade.View):
                 elif LEVEL_MAP[row_idx][col_idx] == "P":
                     player_to_append = arcade.Sprite(Player(x,y))
                     self.player_list.append(player_to_append)
+                    self.player = player_to_append
                 elif LEVEL_MAP[row_idx][col_idx] == "G":
-                    ghost_to_append = arcade.Sprite(Enemy(x,y))
+                    ghost_to_append = Enemy(x,y,enemy_texture)
+                    self.ghost_list.append(ghost_to_append)
                 else:
                     print("Not valid")
     def on_draw(self):
-        pass
+        self.clear()
+        if self.game_over is False:
+            self.wall_list.draw()
+            self.ghost_list.draw()
+            self.coin_list.draw()
+            self.player_list.draw()
+            arcade.draw_text(f"{self.player.lives * "💛"}",0,WINDOW_HEIGHT//2,arcade.color.YELLOW)
+            arcade.draw_text(f"Score {self.player.score}",0,WINDOW_HEIGHT//2-20,arcade.color.YELLOW,16)
+        else:
+            arcade.draw_text("The game is over",WINDOW_WIDTH//2,WINDOW_HEIGHT//2,arcade.color.YELLOW)
+    def on_update(self,delta_time):
+        if self.game_over is False:
+            player_center_x = self.player.center_x
+            player_center_y = self.player.center_y
+            self.player.move()
+            list_of_collision_walls_player = arcade.check_for_collision_with_list(self.player,self.wall_list)
+            if len(list_of_collision_walls_player) > 0:
+                self.player.center_x = player_center_x
+                self.player.center_y = player_center_y
+            for ghost in self.ghost_list:
+                ghost_center_x=ghost.center_x
+                ghost_center_y = ghost.center_y
+                ghost.update(delta_time)
+                list_of_collision_walls_ghost = arcade.check_for_collision_with_list(ghost,self.wall_list)
+                if len(list_of_collision_walls_ghost) >0:
+                    ghost.center_x = ghost_center_x
+                    ghost.center_y = ghost_center_y
+                    ghost.pick_new_direction()
+            list_of_collision_coins_player = arcade.check_for_collision_with_list(self.player,self.coin_list)
+            for coin in list_of_collision_coins_player:
+                self.player.score += coin.value
+                coin.remove_from_sprite_lists()
+            list_of_collision_ghosts_player = arcade.check_for_collision_with_list(self.player,self.ghost_list)
+            if len(list_of_collision_ghosts_player) > 0:
+                self.player.lives -=1
+                self.player.center_x = self.start_x
+                self.player.center_y = self.start_y
+                # if stuck maybe here
+                self.player.speed = 0
+                if self.player.lives <= 0:
+                    self.game_over = True
+
+    def on_key_press(self,key,modifiers):
+        if key== arcade.key.SPACE:
+           return setup()
+        elif key==arcade.key.UP:
+             self.player.change_y+=1
+        elif key==arcade.key.DOWN:
+             self.player.change_y-=1
+        elif key==arcade.key.RIGHT:
+            self.player.change_x+=1
+        elif key == arcade.key.LEFT:
+            self.player.change_x -= 1
+
+
+
+
 
 
