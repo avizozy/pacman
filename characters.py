@@ -50,8 +50,7 @@ class Enemy(Character):
         self.change_x = chosen_direction[0]
         self.time_to_change_direction = random.uniform(0.3, 1.0)
 
-    def update(self):
-        delta_time = 1 / 60
+    def update(self,delta_time = 1/60):
         self.time_to_change_direction -= delta_time
         if self.time_to_change_direction<=0:
             self.pick_new_direction()

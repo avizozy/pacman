@@ -4,9 +4,9 @@
 מכיל את המחלקה:
 - PacmanGame: ניהול מצב המשחק, ציור, עדכון ותשובת מקלדת.
 """
-import arcade
 from constants import *
 from characters import *
+import arcade
 
 
 class PacmanGame(arcade.View):
@@ -54,6 +54,39 @@ class PacmanGame(arcade.View):
             arcade.draw_text(f"Score {self.player.score}",0,WINDOW_HEIGHT//2-20,arcade.color.YELLOW,16)
         else:
             arcade.draw_text("The game is over",WINDOW_WIDTH//2,WINDOW_HEIGHT//2,arcade.color.YELLOW)
+    def on_update(self,delta_time):
+        if self.game_over is False:
+            player_center_x = self.player.center_x
+            player_center_y = self.player.center_y
+            self.player.move()
+            list_of_collision_walls_player = arcade.check_for_collision_with_list(self.player,self.wall_list)
+            if len(list_of_collision_walls_player) > 0:
+                self.player.center_x = player_center_x
+                self.player.center_y = player_center_y
+            for ghost in self.ghost_list:
+                ghost_center_x=ghost.center_x
+                ghost_center_y = ghost.center_y
+                ghost.update(delta_time)
+                list_of_collision_walls_ghost = arcade.check_for_collision_with_list(ghost,self.wall_list)
+                if len(list_of_collision_walls_ghost) >0:
+                    ghost.center_x = ghost_center_x
+                    ghost.center_y = ghost_center_y
+                    ghost.pick_new_direction()
+            list_of_collision_coins_player = arcade.check_for_collision_with_list(self.player,self.coin_list)
+            for coin in list_of_collision_coins_player:
+                self.player.score += coin.value
+                coin.remove_from_sprite_lists()
+            list_of_collision_ghosts_player = arcade.check_for_collision_with_list(self.player,self.ghost_list)
+            if len(list_of_collision_ghosts_player) > 0:
+                self.player.lives -=1
+                self.player.center_x = self.start_x
+                self.player.center_y = self.start_y
+                # if stuck maybe here
+                self.player.speed = 0
+                if self.player.lives <= 0:
+                    self.game_over = True
+
+
 
 
 
