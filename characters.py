@@ -2,16 +2,17 @@ import random
 import arcade
 
 
-from constants import LEVEL_MAP,TILE_SIZE
+from constants import TILE_SIZE
 player_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.YELLOW,255,255)
 enemy_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.RED,255,255)
 coin_texture=arcade.make_soft_circle_texture(TILE_SIZE//6,arcade.color.YELLOW,255,255)
-
-class Coin:
-    def __init__(self,center_x,center_y):
+wall_texture = arcade.make_soft_square_texture(TILE_SIZE,arcade.color.BLUE,255,255)
+class Coin(arcade.Sprite):
+    def __init__(self,center_x,center_y,texture):
+        super().__init__()
         self.center_x = center_x
         self.center_y = center_y
-        self.texture=coin_texture
+        self.texture=texture
         self.value = 10
 
 class Character(arcade.Sprite):
@@ -19,6 +20,8 @@ class Character(arcade.Sprite):
         super().__init__()
         self.center_x = center_x
         self.texture=texture
+        self.width = TILE_SIZE
+        self.height = TILE_SIZE
         self.center_y = center_y
         self.speed = 0
         self.change_x = 0
@@ -26,8 +29,8 @@ class Character(arcade.Sprite):
 
 
 class Player(Character):
-    def __init__(self,center_x,center_y):
-        super().__init__(center_x,center_y,player_texture)
+    def __init__(self,center_x,center_y,texture):
+        super().__init__(center_x,center_y,texture)
         self.score = 0
         self.lives = 3
 
@@ -36,8 +39,8 @@ class Player(Character):
         self.center_y = self.change_y*self.speed
 
 class Enemy(Character):
-    def __init__(self,center_x,center_y):
-        super().__init__(center_x,center_y,enemy_texture)
+    def __init__(self,center_x,center_y,texture):
+        super().__init__(center_x,center_y,texture)
         self.time_to_change_direction = 0
 
     def pick_new_direction(self):
@@ -55,7 +58,9 @@ class Enemy(Character):
         self.center_y += self.change_y * self.speed
         self.center_x += self.change_x * self.speed
 
-class Wall:
-    def __init__(self,center_x,center_y):
+class Wall(arcade.Sprite):
+    def __init__(self,center_x,center_y,texture):
+        super().__init__()
         self.center_x = center_x
         self.center_y = center_y
+        self.texture = texture
