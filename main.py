@@ -8,11 +8,12 @@
 - הרצת לולאת המשחק
 """
 from game import *
+from constants import *
 import arcade
 
 def main():
     """פונקציית main שמריצה את המשחק."""
-    arcade.Window()
+    arcade.Window(WINDOW_WIDTH,WINDOW_HEIGHT)
     pacmen_game = PacmanGame()
     pacmen_game.setup()
     pacmen_game.on_draw()

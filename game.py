@@ -26,8 +26,8 @@ class PacmanGame(arcade.View):
         rows = len(LEVEL_MAP)
         for row_idx, row in enumerate(LEVEL_MAP):
             for col_idx, cell in enumerate(row):
-                x = col_idx * TILE_SIZE + TILE_SIZE*8
-                y = (rows - row_idx - 1) * TILE_SIZE + TILE_SIZE *8
+                x = col_idx * TILE_SIZE + TILE_SIZE/2
+                y = (rows - row_idx - 1) * TILE_SIZE + TILE_SIZE /2
                 if LEVEL_MAP[row_idx][col_idx] == "#":
                     wall_to_append = Wall(x,y,wall_texture)
                     self.wall_list.append(wall_to_append)
@@ -50,8 +50,8 @@ class PacmanGame(arcade.View):
             self.ghost_list.draw()
             self.coin_list.draw()
             self.player_list.draw()
-            arcade.draw_text(f"{self.player.lives * "💛"}",0,700,arcade.color.YELLOW)
-            arcade.draw_text(f"Score {self.player.score}",0,680,arcade.color.YELLOW,16)
+            arcade.draw_text(f"{self.player.lives * "💛"}",0,WINDOW_HEIGHT//2,arcade.color.YELLOW)
+            arcade.draw_text(f"Score {self.player.score}",0,WINDOW_HEIGHT//2-20,arcade.color.YELLOW,16)
         else:
             arcade.draw_text("The game is over",WINDOW_WIDTH//2,WINDOW_HEIGHT//2,arcade.color.YELLOW)
 
