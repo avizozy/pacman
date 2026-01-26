@@ -5,18 +5,19 @@
 - יצירת חלון Arcade
 - יצירת אובייקט PacmanGame
 - אתחול המשחק
-- הרצת לולאת המשחק
+- הרצת לולאת המשח
 """
+
 from game import *
 from constants import *
 import arcade
 
 def main():
     """פונקציית main שמריצה את המשחק."""
-    arcade.Window(WINDOW_WIDTH,WINDOW_HEIGHT)
+    window = arcade.Window(WINDOW_WIDTH,WINDOW_HEIGHT)
     pacmen_game = PacmanGame()
+    window.show_view(pacmen_game)
     pacmen_game.setup()
-    pacmen_game.on_draw()
     arcade.run()
 
 

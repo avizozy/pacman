@@ -4,7 +4,6 @@
 מכיל את המחלקה:
 - PacmanGame: ניהול מצב המשחק, ציור, עדכון ותשובת מקלדת.
 """
-from turtledemo.clock import setup
 
 import arcade
 from constants import *
@@ -31,13 +30,15 @@ class PacmanGame(arcade.View):
                 x = col_idx * TILE_SIZE + TILE_SIZE / 2
                 y = (rows - row_idx - 1) * TILE_SIZE + TILE_SIZE / 2
                 if LEVEL_MAP[row_idx][col_idx] == "#":
-                    wall_to_append = arcade.Sprite(Wall(x,y))
+                    wall_to_append = Wall(x,y,wall_texture)
                     self.wall_list.append(wall_to_append)
                 elif LEVEL_MAP[row_idx][col_idx] == ".":
-                    coin_to_append = arcade.Sprite(Coin(x,y))
+                    coin_to_append = Coin(x,y,coin_texture)
                     self.coin_list.append(coin_to_append)
                 elif LEVEL_MAP[row_idx][col_idx] == "P":
-                    player_to_append = arcade.Sprite(Player(x,y))
+                    player_to_append = Player(x,y,player_texture)
+                    self.start_x = x
+                    self.start_y = y
                     self.player_list.append(player_to_append)
                     self.player = player_to_append
                 elif LEVEL_MAP[row_idx][col_idx] == "G":
@@ -75,6 +76,8 @@ class PacmanGame(arcade.View):
                     ghost.center_y = ghost_center_y
                     ghost.pick_new_direction()
             list_of_collision_coins_player = arcade.check_for_collision_with_list(self.player,self.coin_list)
+            if len(self.coin_list) == 0:
+                self.game_over = True
             for coin in list_of_collision_coins_player:
                 self.player.score += coin.value
                 coin.remove_from_sprite_lists()
@@ -83,27 +86,21 @@ class PacmanGame(arcade.View):
                 self.player.lives -=1
                 self.player.center_x = self.start_x
                 self.player.center_y = self.start_y
-                # if stuck maybe here
-                self.player.speed = 0
                 if self.player.lives <= 0:
                     self.game_over = True
+                    self.player.speed = 0
 
     def on_key_press(self,key,modifiers):
         if key== arcade.key.SPACE:
-           return setup()
+           return self.setup()
         elif key==arcade.key.UP:
-             self.player.change_y+=1
+             self.player.change_y = 1
         elif key==arcade.key.DOWN:
-             self.player.change_y-=1
+             self.player.change_y = -1
         elif key==arcade.key.RIGHT:
-            self.player.change_x+=1
+            self.player.change_x=1
         elif key == arcade.key.LEFT:
-            self.player.change_x -= 1
-
-
-
-
-
+            self.player.change_x = -1
 
     def on_key_release(self,key,modifiers):
         if key==arcade.key.UP or key==arcade.key.DOWN:

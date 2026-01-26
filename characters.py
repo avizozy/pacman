@@ -23,7 +23,7 @@ class Character(arcade.Sprite):
         self.width = TILE_SIZE
         self.height = TILE_SIZE
         self.center_y = center_y
-        self.speed = 0
+        self.speed = 2
         self.change_x = 0
         self.change_y = 0
 
@@ -35,8 +35,8 @@ class Player(Character):
         self.lives = 3
 
     def move(self):
-        self.center_x = self.change_x*self.speed
-        self.center_y = self.change_y*self.speed
+        self.center_x += self.change_x * self.speed
+        self.center_y += self.change_y * self.speed
 
 class Enemy(Character):
     def __init__(self,center_x,center_y,texture):
