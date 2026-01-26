@@ -1,3 +1,4 @@
+
 """
 מודול הלוגיקה הראשית של משחק הפקמן.
 
@@ -16,13 +17,14 @@ class PacmanGame(arcade.View):
         self.wall_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
         self.ghost_list = arcade.SpriteList()
+        self.apple_list = arcade.SpriteList()
         self.player_list = arcade.SpriteList()
         self.player = None
         self.game_over = False
         self.background_color = arcade.color.BLACK
         self.start_x=0
         self.start_y=0
-
+        self.power_mode = False
     def setup(self):
         rows = len(LEVEL_MAP)
         for row_idx, row in enumerate(LEVEL_MAP):
@@ -35,6 +37,9 @@ class PacmanGame(arcade.View):
                 elif LEVEL_MAP[row_idx][col_idx] == ".":
                     coin_to_append = Coin(x,y,coin_texture)
                     self.coin_list.append(coin_to_append)
+                elif LEVEL_MAP[row_idx][col_idx] == "A":
+                    apple_to_append = Apple(x,y,"assets/Apple.png")
+                    self.apple_list.append(apple_to_append)
                 elif LEVEL_MAP[row_idx][col_idx] == "P":
                     player_to_append = Player(x,y,player_texture)
                     self.start_x = x
@@ -52,6 +57,7 @@ class PacmanGame(arcade.View):
             self.wall_list.draw()
             self.ghost_list.draw()
             self.coin_list.draw()
+            self.apple_list.draw()
             self.player_list.draw()
             arcade.draw_text(f"{self.player.lives * "💛"}",0,WINDOW_HEIGHT//2,arcade.color.YELLOW)
             arcade.draw_text(f"Score {self.player.score}",0,WINDOW_HEIGHT//2-20,arcade.color.YELLOW,16)
@@ -89,6 +95,23 @@ class PacmanGame(arcade.View):
                 if self.player.lives <= 0:
                     self.game_over = True
                     self.player.speed = 0
+            if self.player.center_x  >820:
+                self.player.center_x = 0
+            if self.player.center_x <-20:
+                self.player.center_x = 800
+            list_of_collision_apple_player = arcade.check_for_collision_with_list(self.player,self.apple_list)
+            for enemy in self.ghost_list:
+                if enemy.center_x > 820:
+                    enemy.center_x = 0
+                if enemy.center_x < -20:
+                    enemy.center_x = 800
+            for apple in list_of_collision_apple_player:
+                apple.remove_from_sprite_lists()
+                self.power_mode = True
+                arcade.play_sound(arcade.load_sound("assets/Start_Game.mp3"))
+                # הסאונד נותן לך אינדיקציה שיש לך את הכוח
+
+
 
     def on_key_press(self,key,modifiers):
         if key== arcade.key.SPACE:

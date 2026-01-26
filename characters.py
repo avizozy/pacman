@@ -20,10 +20,10 @@ class Character(arcade.Sprite):
         super().__init__()
         self.center_x = center_x
         self.texture=texture
-        self.width = TILE_SIZE
-        self.height = TILE_SIZE
+        self.width = TILE_SIZE-5
+        self.height = TILE_SIZE-5
         self.center_y = center_y
-        self.speed = 2
+        self.speed = 3
         self.change_x = 0
         self.change_y = 0
 
@@ -63,3 +63,8 @@ class Wall(arcade.Sprite):
         self.center_x = center_x
         self.center_y = center_y
         self.texture = texture
+class Apple(arcade.Sprite):
+    def __init__(self,center_x,center_y,image_path):
+        super().__init__(image_path,0.01)
+        self.center_x = center_x
+        self.center_y = center_y
