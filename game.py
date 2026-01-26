@@ -5,9 +5,9 @@
 - PacmanGame: ניהול מצב המשחק, ציור, עדכון ותשובת מקלדת.
 """
 
-import arcade
 from constants import *
 from characters import *
+import arcade
 
 
 class PacmanGame(arcade.View):
