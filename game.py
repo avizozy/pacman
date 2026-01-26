@@ -25,6 +25,7 @@ class PacmanGame(arcade.View):
         self.start_x=0
         self.start_y=0
         self.power_mode = False
+        self.power_timer = 0
     def setup(self):
         rows = len(LEVEL_MAP)
         for row_idx, row in enumerate(LEVEL_MAP):
@@ -67,6 +68,14 @@ class PacmanGame(arcade.View):
         if self.game_over is False:
             player_center_x = self.player.center_x
             player_center_y = self.player.center_y
+
+            if self.power_mode:
+                self.power_timer -= delta_time
+                if self.power_timer <= 0:
+                    self.power_mode = False
+                    for ghost in self.ghost_list:
+                        ghost.set_vulnerable(False)
+
             self.player.move()
             list_of_collision_walls_player = arcade.check_for_collision_with_list(self.player,self.wall_list)
             if len(list_of_collision_walls_player) > 0:
@@ -87,14 +96,21 @@ class PacmanGame(arcade.View):
             for coin in list_of_collision_coins_player:
                 self.player.score += coin.value
                 coin.remove_from_sprite_lists()
+                arcade.play_sound(arcade.load_sound("assets/eat_coin_pacman.mp3"))
             list_of_collision_ghosts_player = arcade.check_for_collision_with_list(self.player,self.ghost_list)
             if len(list_of_collision_ghosts_player) > 0:
-                self.player.lives -=1
-                self.player.center_x = self.start_x
-                self.player.center_y = self.start_y
-                if self.player.lives <= 0:
-                    self.game_over = True
-                    self.player.speed = 0
+                if self.power_mode:
+                    for ghost in list_of_collision_ghosts_player:
+                        ghost.center_x = ghost.start_x
+                        ghost.center_y = ghost.start_y
+                        self.player.score += 200
+                else:
+                    self.player.lives -=1
+                    self.player.center_x = self.start_x
+                    self.player.center_y = self.start_y
+                    if self.player.lives <= 0:
+                        self.game_over = True
+                        self.player.speed = 0
             if self.player.center_x  >820:
                 self.player.center_x = 0
             if self.player.center_x <-20:
@@ -108,8 +124,12 @@ class PacmanGame(arcade.View):
             for apple in list_of_collision_apple_player:
                 apple.remove_from_sprite_lists()
                 self.power_mode = True
+                self.power_timer = 10.0
+
+                for ghost in self.ghost_list:
+                    ghost.set_vulnerable(True)
                 arcade.play_sound(arcade.load_sound("assets/Start_Game.mp3"))
-                # הסאונד נותן לך אינדיקציה שיש לך את הכוח
+
 
 
 

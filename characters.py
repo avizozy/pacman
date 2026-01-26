@@ -7,6 +7,7 @@ player_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.YELLOW,255
 enemy_texture=arcade.make_soft_circle_texture(TILE_SIZE,arcade.color.RED,255,255)
 coin_texture=arcade.make_soft_circle_texture(TILE_SIZE//6,arcade.color.YELLOW,255,255)
 wall_texture = arcade.make_soft_square_texture(TILE_SIZE,arcade.color.BLUE,255,255)
+blue_enemy_texture = arcade.make_soft_circle_texture(TILE_SIZE, arcade.color.BLUE, 255, 255)
 class Coin(arcade.Sprite):
     def __init__(self,center_x,center_y,texture):
         super().__init__()
@@ -20,10 +21,12 @@ class Character(arcade.Sprite):
         super().__init__()
         self.center_x = center_x
         self.texture=texture
-        self.width = TILE_SIZE-5
-        self.height = TILE_SIZE-5
+        self.width = TILE_SIZE-6
+        self.height = TILE_SIZE-6
         self.center_y = center_y
         self.speed = 3
+        self.start_x = center_x
+        self.start_y = center_y
         self.change_x = 0
         self.change_y = 0
 
@@ -56,6 +59,12 @@ class Enemy(Character):
             self.pick_new_direction()
         self.center_y += self.change_y * self.speed
         self.center_x += self.change_x * self.speed
+
+    def set_vulnerable(self, vulnerable):
+        if vulnerable:
+            self.texture = blue_enemy_texture
+        else:
+            self.texture = enemy_texture
 
 class Wall(arcade.Sprite):
     def __init__(self,center_x,center_y,texture):
