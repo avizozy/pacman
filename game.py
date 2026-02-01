@@ -39,7 +39,7 @@ class PacmanGame(arcade.View):
                     coin_to_append = Coin(x,y,coin_texture)
                     self.coin_list.append(coin_to_append)
                 elif LEVEL_MAP[row_idx][col_idx] == "A":
-                    apple_to_append = Apple(x,y,"assets/Apple.png")
+                    apple_to_append = Apple(x,y,"assets/AppleBack.png")
                     self.apple_list.append(apple_to_append)
                 elif LEVEL_MAP[row_idx][col_idx] == "P":
                     player_to_append = Player(x,y,player_texture)
@@ -63,7 +63,8 @@ class PacmanGame(arcade.View):
             arcade.draw_text(f"{self.player.lives * "💛"}",0,WINDOW_HEIGHT//2,arcade.color.YELLOW)
             arcade.draw_text(f"Score {self.player.score}",0,WINDOW_HEIGHT//2-20,arcade.color.YELLOW,16)
         else:
-            arcade.draw_text("The game is over",WINDOW_WIDTH//2,WINDOW_HEIGHT//2,arcade.color.YELLOW)
+            arcade.draw_text("GAME OVER",WINDOW_WIDTH // 2,WINDOW_HEIGHT // 2,arcade.color.YELLOW,60,anchor_x="center")
+
     def on_update(self,delta_time):
         if self.game_over is False:
             player_center_x = self.player.center_x
@@ -96,7 +97,6 @@ class PacmanGame(arcade.View):
             for coin in list_of_collision_coins_player:
                 self.player.score += coin.value
                 coin.remove_from_sprite_lists()
-                arcade.play_sound(arcade.load_sound("assets/eat_coin_pacman.mp3"))
             list_of_collision_ghosts_player = arcade.check_for_collision_with_list(self.player,self.ghost_list)
             if len(list_of_collision_ghosts_player) > 0:
                 if self.power_mode:
@@ -128,7 +128,7 @@ class PacmanGame(arcade.View):
 
                 for ghost in self.ghost_list:
                     ghost.set_vulnerable(True)
-                arcade.play_sound(arcade.load_sound("assets/Start_Game.mp3"))
+                arcade.play_sound(arcade.load_sound("assets/eat_apple_sound.mp3"))
 
 
 
