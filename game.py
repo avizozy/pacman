@@ -82,6 +82,7 @@ class PacmanGame(arcade.View):
             if len(list_of_collision_walls_player) > 0:
                 self.player.center_x = player_center_x
                 self.player.center_y = player_center_y
+            self.teleport()
             for ghost in self.ghost_list:
                 ghost_center_x=ghost.center_x
                 ghost_center_y = ghost.center_y
@@ -111,28 +112,37 @@ class PacmanGame(arcade.View):
                     if self.player.lives <= 0:
                         self.game_over = True
                         self.player.speed = 0
-            if self.player.center_x  >820:
-                self.player.center_x = 0
-            if self.player.center_x <-20:
-                self.player.center_x = 800
             list_of_collision_apple_player = arcade.check_for_collision_with_list(self.player,self.apple_list)
-            for enemy in self.ghost_list:
-                if enemy.center_x > 820:
-                    enemy.center_x = 0
-                if enemy.center_x < -20:
-                    enemy.center_x = 800
             for apple in list_of_collision_apple_player:
                 apple.remove_from_sprite_lists()
                 self.power_mode = True
                 self.power_timer = 10.0
-
                 for ghost in self.ghost_list:
                     ghost.set_vulnerable(True)
                 arcade.play_sound(arcade.load_sound("assets/eat_apple_sound.mp3"))
 
+            # Teleport
 
 
 
+    def teleport(self):
+        if self.player.center_x > WINDOW_WIDTH:
+            self.player.center_x = 0
+        if self.player.center_x < 0:
+            self.player.center_x = WINDOW_WIDTH
+        if self.player.center_y > WINDOW_HEIGHT:
+            self.player.center_y = 0
+        if self.player.center_y < 0:
+            self.player.center_y = WINDOW_HEIGHT
+        for enemy in self.ghost_list:
+            if enemy.center_x > WINDOW_WIDTH:
+                enemy.center_x = 0
+            if enemy.center_x < 0:
+                enemy.center_x = WINDOW_WIDTH
+            if enemy.center_y > WINDOW_HEIGHT:
+                enemy.center_y = 0
+            if enemy.center_y < 0:
+                enemy.center_y = WINDOW_HEIGHT
     def on_key_press(self,key,modifiers):
         if key== arcade.key.SPACE:
            return self.setup()
